@@ -1,5 +1,10 @@
 jquery is simple CLI tool to display Jira tickets on terminal
 
+## Contributing
+
+All lines of code of this tool has been created by ChatGPT, so most probably there will be lots on possible enhancements.
+Don't hesitate to open a pull request with any suggestion.
+
 ## Configuration
 
 During the first run, jquery will request some configuration data:
@@ -7,7 +12,7 @@ During the first run, jquery will request some configuration data:
  - Jira BaseURL (p.e. https://irontec.atlassian.net)
  - Jira Login Email (p.e. kaian@irontec.com)
  - Jira API Token (you can generate a token at https://id.atlassian.com/manage-profile/security/api-tokens)
- 
+
 
 ## Usage
 
@@ -20,21 +25,23 @@ Usage:
   jquery [OPTIONS]
 
 Application Options:
-  -d, --debug       Print debugging information
-  -u, --user=       Name or email of assigned user
-  -p, --project=    Key of project to search issues
-  -s, --search      Search text in summary, issue description or comments
-  -l, --limit=      Limit output to first N results (default: 50)
-  -c, --count       Only print issue count
-  -S, --sprint      Only print issues with active sprint
-  -e, --status=     Only print issues with given status Name
-  -O, --unresolved  Only print unresolved issues
-  -A, --all         Print all issues no matter their status
-  -q, --query=      Run a custom query
-  -o, --open=       Open given issue in a browser tab
+  -d, --debug          Print debugging information
+  -u, --user=          Name or email of assigned user
+  -p, --project=       Key of project to search issues
+  -s, --search         Search text in summary, issue description or comments
+  -l, --limit=         Limit output to first N results (default: 50)
+  -c, --count          Only print issue count
+  -S, --sprint         Only print issues with active sprint
+  -e, --status=        Only print issues with given status Name
+  -O, --unresolved     Only print unresolved issues
+  -A, --all            Print all issues no matter their status
+  -q, --query=         Run a custom query
+  -o, --open=          Open given issue in a browser tab
+      --list-projects  List all visible projects for current user
+  -T, --order-by-time  Sort issues by last updated time (use -TT for reverse)
 
 Help Options:
-  -h, --help        Show this help message
+  -h, --help           Show this help message
 ```
 
 ## License
