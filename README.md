@@ -36,9 +36,13 @@ Application Options:
   -O, --unresolved     Only print unresolved issues
   -A, --all            Print all issues no matter their status
   -q, --query=         Run a custom query
+  -f, --filter=        Search issues using a saved Jira filter ID
   -o, --open=          Open given issue in a browser tab
-      --list-projects  List all visible projects for current user
   -T, --order-by-time  Sort issues by last updated time (use -TT for reverse)
+  -U, --order-by-user  Sort issues by assignee (use -UU for reverse ordering)
+      --list-projects  List all visible projects for current user
+      --list-users     List all users in Jira
+      --list-filters   List all saved filters in Jira
 
 Help Options:
   -h, --help           Show this help message

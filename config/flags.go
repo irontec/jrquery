@@ -21,11 +21,11 @@ type Flags struct {
 	Query        string `short:"q" long:"query" description:"Run a custom query"`
 	Filter       string `short:"f" long:"filter" description:"Search issues using a saved Jira filter ID"`
 	Open         string `short:"o" long:"open" description:"Open given issue in a browser tab"`
+	OrderByTime  []bool `short:"T" long:"order-by-time" description:"Sort issues by last updated time (use -TT for reverse)"`
+	OrderByUser  []bool `short:"U" long:"order-by-user" description:"Sort issues by assignee (use -UU for reverse ordering)"`
 	ListProjects bool   `long:"list-projects" description:"List all visible projects for current user"`
 	ListUsers    bool   `long:"list-users" description:"List all users in Jira"`
 	ListFilters  bool   `long:"list-filters" description:"List all saved filters in Jira"`
-	OrderByTime  []bool `short:"T" long:"order-by-time" description:"Sort issues by last updated time (use -TT for reverse)"`
-	OrderByUser  []bool `short:"U" long:"order-by-user" description:"Sort issues by assignee (use -UU for reverse ordering)"`
 }
 
 // ParseFlags parses command-line flags and returns a populated Flags struct
