@@ -146,7 +146,7 @@ func (c *Client) SearchIssuesByFilter(ctx context.Context, filterID string, limi
 }
 
 // GetAllProjects retrieves all visible Jira projects.
-func (c *Client) GetAllProjects(ctx context.Context) (cloud.ProjectList, error) {
+func (c *Client) GetAllProjects(ctx context.Context) (*ProjectList, error) {
 	// Fetch the list of projects using the Jira API
 	projectList, response, err := c.apiClient.Project.GetAll(ctx, nil)
 	if err != nil {
@@ -158,7 +158,7 @@ func (c *Client) GetAllProjects(ctx context.Context) (cloud.ProjectList, error) 
 	}
 
 	// Return the list of projects (accessing the Projects field from the ProjectList)
-	return *projectList, nil
+	return NewProjectList(projectList, response.MaxResults, response.Total), nil
 }
 
 // GetAllUsers retrieves all visible Jira users, with pagination.

@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"log"
 	"os/exec"
-	"sort"
 
 	"irontec.com/jquery/config"
 	"irontec.com/jquery/internal/jira"
@@ -68,19 +67,10 @@ func main() {
 	if flags.ListProjects {
 		projects, err := client.GetAllProjects(context.Background())
 		if err != nil {
-			fmt.Println("Error fetching projects:", err)
+			log.Fatalf("Error fetching projects: %v", err)
 			return
 		}
-
-		// Sort the projects by their Key
-		sort.Slice(projects, func(i, j int) bool {
-			return (projects)[i].Key < (projects)[j].Key
-		})
-
-		// Display sorted projects with their key and name
-		for _, project := range projects {
-			fmt.Printf("\033[1;34m%ss\033[0m: \033[33m%s\033[0m\n", project.Key, project.Name)
-		}
+		projects.Print()
 		return
 	}
 
