@@ -39,6 +39,11 @@ func main() {
 		return
 	}
 
+	// Handle 'me' as username
+	if flags.Username == "me" {
+		flags.Username = cfg.JiraUserEmail
+	}
+
 	// Initialize Jira client with loaded config
 	client, err := jira.NewClient(cfg.JiraBaseURL, cfg.JiraAPIToken, cfg.JiraUserEmail)
 	if err != nil {
