@@ -22,6 +22,7 @@ type Flags struct {
 	Open         string `short:"o" long:"open" description:"Open given issue in a browser tab"`
 	ListProjects bool   `long:"list-projects" description:"List all visible projects for current user"`
 	OrderByTime  []bool `short:"T" long:"order-by-time" description:"Sort issues by last updated time (use -TT for reverse)"`
+	OrderByUser  []bool `short:"U" long:"order-by-user" description:"Sort issues by assignee (use -UU for reverse ordering)"`
 }
 
 // ParseFlags parses command-line flags and returns a populated Flags struct

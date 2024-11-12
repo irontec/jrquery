@@ -99,12 +99,18 @@ func (qb *QueryBuilder) BuildJQLQuery(flags *config.Flags, searchTerms []string)
 	// Determine the ORDER BY clause based on the flag count
 	orderBy := "ORDER BY key ASC" // Default ordering by key
 
-	// If the -T flag was specified once, sort by updated DESC
-	// If the -T flag was specified twice, sort by updated ASC (reverse order)
+	// Handle sorting by last updated time (based on flag -T)
 	if len(flags.OrderByTime) == 1 {
 		orderBy = "ORDER BY updated DESC"
 	} else if len(flags.OrderByTime) == 2 {
 		orderBy = "ORDER BY updated ASC"
+	}
+
+	// Handle sorting by user (assignee) (based on flag -U)
+	if len(flags.OrderByUser) == 1 {
+		orderBy = "ORDER BY assignee ASC"
+	} else if len(flags.OrderByUser) == 2 {
+		orderBy = "ORDER BY assignee DESC"
 	}
 
 	// Return the full JQL query with the ORDER BY clause
