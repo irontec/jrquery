@@ -38,7 +38,7 @@ func (fl *FilterList) Print() {
 	})
 
 	for _, filter := range fl.Filters {
-		fmt.Printf("\033[1;34m%ss\033[0m: \033[33m%s\033[0m\n", filter.ID, filter.Name)
+		fmt.Printf("\033[1;34m%s\033[0m: \033[33m%s\033[0m\n", filter.ID, filter.Name)
 	}
 
 	if fl.Total > fl.MaxResults {

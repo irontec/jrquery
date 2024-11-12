@@ -38,7 +38,7 @@ func (pl *ProjectList) Print() {
 	})
 
 	for _, project := range pl.Projects {
-		fmt.Printf("\033[1;34m%ss\033[0m: \033[33m%s\033[0m\n", project.Key, project.Name)
+		fmt.Printf("\033[1;34m%s\033[0m: \033[33m%s\033[0m\n", project.Key, project.Name)
 	}
 
 	if pl.Total > pl.MaxResults {
