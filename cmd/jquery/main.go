@@ -68,7 +68,6 @@ func main() {
 		projects, err := client.GetAllProjects(context.Background())
 		if err != nil {
 			log.Fatalf("Error fetching projects: %v", err)
-			return
 		}
 		projects.Print()
 		return
@@ -78,17 +77,9 @@ func main() {
 		// Fetch the list of users
 		users, err := client.GetAllUsers(context.Background())
 		if err != nil {
-			fmt.Println("Error fetching users:", err)
-			return
+			log.Fatalf("Error fetching users: %v", err)
 		}
-
-		// Print users with their username and name
-		for _, user := range users {
-			if user.AccountType == "atlassian" && user.Active {
-				fmt.Printf("\033[1;34m%s\033[0m: \033[33m%s\033[0m\n", user.EmailAddress, user.DisplayName)
-			}
-		}
-
+		users.Print()
 		return
 	}
 
@@ -96,8 +87,7 @@ func main() {
 	if flags.ListFilters {
 		filters, err := client.GetAllFilters(context.Background())
 		if err != nil {
-			fmt.Println("Error fetching filters:", err)
-			return
+			log.Fatalf("Error fetching filters: %v", err)
 		}
 		filters.Print()
 		return

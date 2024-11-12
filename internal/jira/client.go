@@ -162,7 +162,7 @@ func (c *Client) GetAllProjects(ctx context.Context) (*ProjectList, error) {
 }
 
 // GetAllUsers retrieves all visible Jira users, with pagination.
-func (c *Client) GetAllUsers(ctx context.Context) ([]cloud.User, error) {
+func (c *Client) GetAllUsers(ctx context.Context) (*UserList, error) {
 	var allUsers []cloud.User
 	startAt := 0
 	maxResults := 1000 // Maximum number of results per request
@@ -193,7 +193,7 @@ func (c *Client) GetAllUsers(ctx context.Context) ([]cloud.User, error) {
 		startAt += maxResults
 	}
 
-	return allUsers, nil
+	return NewUserList(allUsers, maxResults, len(allUsers)), nil
 }
 
 // GetAllFilters retrieves all saved filters from Jira using the apiClient.
