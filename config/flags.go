@@ -26,6 +26,7 @@ type Flags struct {
 	ListProjects bool   `long:"list-projects" description:"List all visible projects for current user"`
 	ListUsers    bool   `long:"list-users" description:"List all users in Jira"`
 	ListFilters  bool   `long:"list-filters" description:"List all saved filters in Jira"`
+	Version      bool   `short:"v" long:"version" description:"Show the version"`
 }
 
 // ParseFlags parses command-line flags and returns a populated Flags struct
@@ -34,16 +35,8 @@ func ParseFlags() (*Flags, []string, error) {
 	var searchTerms []string
 	parser := flags.NewParser(&opts, flags.Default)
 	searchTerms, err := parser.Parse()
-	if err != nil {
-		switch flagsErr := err.(type) {
-		case flags.ErrorType:
-			if flagsErr == flags.ErrHelp {
-				os.Exit(0)
-			}
-			os.Exit(1)
-		default:
-			os.Exit(0)
-		}
+	if flags.WroteHelp(err) {
+		os.Exit(0)
 	}
-	return &opts, searchTerms, nil
+	return &opts, searchTerms, err
 }

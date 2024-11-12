@@ -1,0 +1,5 @@
+#!/bin/bash -e
+
+go mod tidy
+go build -ldflags "-X main.Version=1.0.0 -X main.Commit=$(git rev-parse --short HEAD)" -o jquery cmd/jquery/main.go
+

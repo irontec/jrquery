@@ -11,11 +11,25 @@ import (
 	"irontec.com/jquery/internal/jira"
 )
 
+var Version = "development"
+var Commit = "unknown"
+
 func main() {
 	//Parse command-line flags
 	flags, searchTerms, err := config.ParseFlags()
 	if err != nil {
 		log.Fatalf("error parsing flags: %v", err)
+	}
+
+	// If the --version flag is set, print the version and exit
+	if flags.Version {
+		fmt.Printf("\033[1;36mjquery\033[0m (%s) - Jira Issues query tool [%s]\n\n", Version, Commit)
+
+		fmt.Println("Copyright (C) 2024 Irontec S.L.")
+		fmt.Println("Licenced under GPLv3+: GNU GPL version 3 or greater.")
+		fmt.Println("Coded by ChatGPT <https://chatgpt.com/>")
+		fmt.Println("Prompted by Ivan Alonso <kaian@irontec.com>")
+		return
 	}
 
 	// Load configuration
