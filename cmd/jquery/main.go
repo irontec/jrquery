@@ -39,11 +39,6 @@ func main() {
 		return
 	}
 
-	if flags.Limit > 100 {
-		fmt.Println("Searchs above 100 results are not currently supported")
-		return
-	}
-
 	// Initialize Jira client with loaded config
 	client, err := jira.NewClient(cfg.JiraBaseURL, cfg.JiraAPIToken, cfg.JiraUserEmail)
 	if err != nil {
@@ -78,7 +73,7 @@ func main() {
 	}
 
 	// Get tickets using the constructed JQL query
-	issueList, err := client.SearchIssues(context.Background(), jqlQuery, 0, flags.Limit)
+	issueList, err := client.SearchIssuesWithPagination(context.Background(), jqlQuery, flags.Limit)
 	if err != nil {
 		log.Fatalf("error fetching issues: %v", err)
 	}
