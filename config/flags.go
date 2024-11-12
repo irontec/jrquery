@@ -19,6 +19,7 @@ type Flags struct {
 	Unresolved   bool   `short:"O" long:"unresolved" description:"Only print unresolved issues"`
 	All          bool   `short:"A" long:"all" description:"Print all issues no matter their status"`
 	Query        string `short:"q" long:"query" description:"Run a custom query"`
+	Filter       string `short:"f" long:"filter" description:"Search issues using a saved Jira filter ID"`
 	Open         string `short:"o" long:"open" description:"Open given issue in a browser tab"`
 	ListProjects bool   `long:"list-projects" description:"List all visible projects for current user"`
 	ListUsers    bool   `long:"list-users" description:"List all users in Jira"`

@@ -90,8 +90,15 @@ func main() {
 		fmt.Printf("Searching issues for JQL: %s\n", jqlQuery)
 	}
 
-	// Get tickets using the constructed JQL query
-	issueList, err := client.SearchIssuesWithPagination(context.Background(), jqlQuery, flags.Limit)
+	var issueList *jira.IssueList
+	if flags.Filter != "" {
+		// Perform search using a saved filter
+		issueList, err = client.SearchIssuesByFilter(context.Background(), flags.Filter, flags.Limit)
+	} else {
+		// Get tickets using the constructed JQL query
+		issueList, err = client.SearchIssuesWithPagination(context.Background(), jqlQuery, flags.Limit)
+	}
+
 	if err != nil {
 		log.Fatalf("error fetching issues: %v", err)
 	}

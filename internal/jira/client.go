@@ -105,6 +105,46 @@ func (c *Client) SearchIssues(ctx context.Context, jql string, start, limit int)
 	return NewIssueList(issues, response.MaxResults, response.Total), nil
 }
 
+// SearchIssuesByFilter retrieves issues using a pre-existing saved filter by its ID and returns an IssueList with pagination.
+func (c *Client) SearchIssuesByFilter(ctx context.Context, filterID string, limit int) (*IssueList, error) {
+	// Create the JQL query with the saved filter
+	jql := fmt.Sprintf("filter=%s", filterID)
+
+	// Initialize pagination variables
+	var allIssues []cloud.Issue
+	startAt := 0
+	fetchLimit := 100 // Set a limit for each page of results (maximum Jira allows is 1000)
+
+	// Iterate over pages of issues
+	for {
+		// Create the search options with pagination
+		searchOptions := &cloud.SearchOptions{
+			StartAt:    startAt,
+			MaxResults: fetchLimit,
+		}
+
+		// Execute the search with the saved filter
+		issues, response, err := c.apiClient.Issue.Search(ctx, jql, searchOptions)
+		if err != nil {
+			return nil, fmt.Errorf("error executing JQL query with filter %s: %w", filterID, err)
+		}
+
+		// Append issues to the list
+		allIssues = append(allIssues, issues...)
+
+		// Check if there are more pages to fetch
+		if len(allIssues) >= limit || len(allIssues) >= response.Total {
+			break
+		}
+
+		// Update the starting point for the next page
+		startAt += fetchLimit
+	}
+
+	// Return the IssueList with the fetched issues and pagination details
+	return NewIssueList(allIssues, len(allIssues), len(allIssues)), nil
+}
+
 // GetAllProjects retrieves all visible Jira projects.
 func (c *Client) GetAllProjects(ctx context.Context) (cloud.ProjectList, error) {
 	// Fetch the list of projects using the Jira API
