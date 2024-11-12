@@ -1,7 +1,6 @@
 package main
 
 import (
-	"context"
 	"fmt"
 	"log"
 	"os/exec"
@@ -65,7 +64,7 @@ func main() {
 
 	// List projects
 	if flags.ListProjects {
-		projects, err := client.GetAllProjects(context.Background())
+		projects, err := client.GetAllProjects()
 		if err != nil {
 			log.Fatalf("Error fetching projects: %v", err)
 		}
@@ -75,7 +74,7 @@ func main() {
 
 	if flags.ListUsers {
 		// Fetch the list of users
-		users, err := client.GetAllUsers(context.Background())
+		users, err := client.GetAllUsers()
 		if err != nil {
 			log.Fatalf("Error fetching users: %v", err)
 		}
@@ -85,7 +84,7 @@ func main() {
 
 	// Handle the --list-filters flag to list all Jira filters
 	if flags.ListFilters {
-		filters, err := client.GetAllFilters(context.Background())
+		filters, err := client.GetAllFilters()
 		if err != nil {
 			log.Fatalf("Error fetching filters: %v", err)
 		}
@@ -103,10 +102,10 @@ func main() {
 	var issueList *jira.IssueList
 	if flags.Filter != "" {
 		// Perform search using a saved filter
-		issueList, err = client.SearchIssuesByFilter(context.Background(), flags.Filter, flags.Limit)
+		issueList, err = client.SearchIssuesByFilter(flags.Filter, flags.Limit)
 	} else {
 		// Get tickets using the constructed JQL query
-		issueList, err = client.SearchIssuesWithPagination(context.Background(), jqlQuery, flags.Limit)
+		issueList, err = client.SearchIssuesWithPagination(jqlQuery, flags.Limit)
 	}
 
 	if err != nil {

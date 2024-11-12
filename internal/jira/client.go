@@ -44,7 +44,7 @@ func (c *Client) GetIssue(ctx context.Context, issueKey string) (*cloud.Issue, e
 }
 
 // SearchIssuesWithPagination fetches issues based on a JQL query with pagination and applies a result limit.
-func (c *Client) SearchIssuesWithPagination(ctx context.Context, jql string, maxResults int) (*IssueList, error) {
+func (c *Client) SearchIssuesWithPagination(jql string, maxResults int) (*IssueList, error) {
 	var allIssues []cloud.Issue
 	startAt := 0
 	totalFetched := 0
@@ -53,7 +53,7 @@ func (c *Client) SearchIssuesWithPagination(ctx context.Context, jql string, max
 
 	for {
 		// Fetch issues in pages of size pageSize
-		issueList, err := c.SearchIssues(ctx, jql, startAt, pageSize)
+		issueList, err := c.SearchIssues(jql, startAt, pageSize)
 		if err != nil {
 			return nil, fmt.Errorf("error fetching issues with pagination: %w", err)
 		}
@@ -90,13 +90,13 @@ func (c *Client) SearchIssuesWithPagination(ctx context.Context, jql string, max
 }
 
 // SearchIssues executes a JQL query to find issues in Jira.
-func (c *Client) SearchIssues(ctx context.Context, jql string, start, limit int) (*IssueList, error) {
+func (c *Client) SearchIssues(jql string, start, limit int) (*IssueList, error) {
 	searchOptions := &cloud.SearchOptions{
 		StartAt:    start,
 		MaxResults: limit,
 	}
 
-	issues, response, err := c.apiClient.Issue.Search(ctx, jql, searchOptions)
+	issues, response, err := c.apiClient.Issue.Search(context.Background(), jql, searchOptions)
 	if err != nil {
 		return nil, fmt.Errorf("error executing JQL query: %w", err)
 	}
@@ -106,7 +106,7 @@ func (c *Client) SearchIssues(ctx context.Context, jql string, start, limit int)
 }
 
 // SearchIssuesByFilter retrieves issues using a pre-existing saved filter by its ID and returns an IssueList with pagination.
-func (c *Client) SearchIssuesByFilter(ctx context.Context, filterID string, limit int) (*IssueList, error) {
+func (c *Client) SearchIssuesByFilter(filterID string, limit int) (*IssueList, error) {
 	// Create the JQL query with the saved filter
 	jql := fmt.Sprintf("filter=%s", filterID)
 
@@ -124,7 +124,7 @@ func (c *Client) SearchIssuesByFilter(ctx context.Context, filterID string, limi
 		}
 
 		// Execute the search with the saved filter
-		issues, response, err := c.apiClient.Issue.Search(ctx, jql, searchOptions)
+		issues, response, err := c.apiClient.Issue.Search(context.Background(), jql, searchOptions)
 		if err != nil {
 			return nil, fmt.Errorf("error executing JQL query with filter %s: %w", filterID, err)
 		}
@@ -146,9 +146,9 @@ func (c *Client) SearchIssuesByFilter(ctx context.Context, filterID string, limi
 }
 
 // GetAllProjects retrieves all visible Jira projects.
-func (c *Client) GetAllProjects(ctx context.Context) (*ProjectList, error) {
+func (c *Client) GetAllProjects() (*ProjectList, error) {
 	// Fetch the list of projects using the Jira API
-	projectList, response, err := c.apiClient.Project.GetAll(ctx, nil)
+	projectList, response, err := c.apiClient.Project.GetAll(context.Background(), nil)
 	if err != nil {
 		return nil, fmt.Errorf("error fetching projects: %w", err)
 	}
@@ -162,14 +162,14 @@ func (c *Client) GetAllProjects(ctx context.Context) (*ProjectList, error) {
 }
 
 // GetAllUsers retrieves all visible Jira users, with pagination.
-func (c *Client) GetAllUsers(ctx context.Context) (*UserList, error) {
+func (c *Client) GetAllUsers() (*UserList, error) {
 	var allUsers []cloud.User
 	startAt := 0
 	maxResults := 1000 // Maximum number of results per request
 
 	for {
 		// Prepare the request with pagination
-		req, err := c.apiClient.NewRequest(ctx, http.MethodGet, fmt.Sprintf("/rest/api/2/users?startAt=%d&maxResults=%d", startAt, maxResults), nil)
+		req, err := c.apiClient.NewRequest(context.Background(), http.MethodGet, fmt.Sprintf("/rest/api/2/users?startAt=%d&maxResults=%d", startAt, maxResults), nil)
 		if err != nil {
 			return nil, fmt.Errorf("error creating request: %w", err)
 		}
@@ -197,9 +197,9 @@ func (c *Client) GetAllUsers(ctx context.Context) (*UserList, error) {
 }
 
 // GetAllFilters retrieves all saved filters from Jira using the apiClient.
-func (c *Client) GetAllFilters(ctx context.Context) (*FilterList, error) {
+func (c *Client) GetAllFilters() (*FilterList, error) {
 	// Use the GetList method from apiClient.Filter to retrieve filters
-	filters, response, err := c.apiClient.Filter.Search(ctx, nil)
+	filters, response, err := c.apiClient.Filter.Search(context.Background(), nil)
 	if err != nil {
 		return nil, fmt.Errorf("error fetching filters: %w", err)
 	}
