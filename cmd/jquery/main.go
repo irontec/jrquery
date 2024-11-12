@@ -65,6 +65,24 @@ func main() {
 		return
 	}
 
+	if flags.ListUsers {
+		// Fetch the list of users
+		users, err := client.GetAllUsers(context.Background())
+		if err != nil {
+			fmt.Println("Error fetching users:", err)
+			return
+		}
+
+		// Print users with their username and name
+		for _, user := range users {
+			if user.AccountType == "atlassian" && user.Active {
+				fmt.Printf("\033[1;32m * \033[34m%s\033[0m (\033[33m%s\033[0m)\n", user.EmailAddress, user.DisplayName)
+			}
+		}
+
+		return
+	}
+
 	// Build JQL query from flags
 	builder := jira.NewQueryBuilder()
 	jqlQuery := builder.BuildJQLQuery(flags, searchTerms)

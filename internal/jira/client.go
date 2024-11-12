@@ -3,6 +3,7 @@ package jira
 import (
 	"context"
 	"fmt"
+	"net/http"
 
 	"github.com/andygrunwald/go-jira/v2/cloud"
 )
@@ -118,4 +119,39 @@ func (c *Client) GetAllProjects(ctx context.Context) (cloud.ProjectList, error) 
 
 	// Return the list of projects (accessing the Projects field from the ProjectList)
 	return *projectList, nil
+}
+
+// GetAllUsers retrieves all visible Jira users, with pagination.
+func (c *Client) GetAllUsers(ctx context.Context) ([]cloud.User, error) {
+	var allUsers []cloud.User
+	startAt := 0
+	maxResults := 1000 // Maximum number of results per request
+
+	for {
+		// Prepare the request with pagination
+		req, err := c.apiClient.NewRequest(ctx, http.MethodGet, fmt.Sprintf("/rest/api/2/users?startAt=%d&maxResults=%d", startAt, maxResults), nil)
+		if err != nil {
+			return nil, fmt.Errorf("error creating request: %w", err)
+		}
+
+		// Store users in this batch
+		users := []cloud.User{}
+		resp, err := c.apiClient.Do(req, &users)
+		if err != nil {
+			return nil, cloud.NewJiraError(resp, err)
+		}
+
+		// Add the batch of users to the full list
+		allUsers = append(allUsers, users...)
+
+		// If fewer users than the maxResults were returned, we've fetched all users
+		if len(users) < maxResults {
+			break
+		}
+
+		// Otherwise, increment the startAt parameter to fetch the next page
+		startAt += maxResults
+	}
+
+	return allUsers, nil
 }

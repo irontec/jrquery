@@ -21,6 +21,7 @@ type Flags struct {
 	Query        string `short:"q" long:"query" description:"Run a custom query"`
 	Open         string `short:"o" long:"open" description:"Open given issue in a browser tab"`
 	ListProjects bool   `long:"list-projects" description:"List all visible projects for current user"`
+	ListUsers    bool   `long:"list-users" description:"List all users in Jira"`
 	OrderByTime  []bool `short:"T" long:"order-by-time" description:"Sort issues by last updated time (use -TT for reverse)"`
 	OrderByUser  []bool `short:"U" long:"order-by-user" description:"Sort issues by assignee (use -UU for reverse ordering)"`
 }
