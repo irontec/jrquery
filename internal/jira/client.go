@@ -195,3 +195,14 @@ func (c *Client) GetAllUsers(ctx context.Context) ([]cloud.User, error) {
 
 	return allUsers, nil
 }
+
+// GetAllFilters retrieves all saved filters from Jira using the apiClient.
+func (c *Client) GetAllFilters(ctx context.Context) (*cloud.FiltersList, error) {
+	// Use the GetList method from apiClient.Filter to retrieve filters
+	filters, _, err := c.apiClient.Filter.Search(ctx, nil)
+	if err != nil {
+		return nil, fmt.Errorf("error fetching filters: %w", err)
+	}
+
+	return filters, nil
+}

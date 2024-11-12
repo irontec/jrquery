@@ -83,6 +83,21 @@ func main() {
 		return
 	}
 
+	// Handle the --list-filters flag to list all Jira filters
+	if flags.ListFilters {
+		filters, err := client.GetAllFilters(context.Background())
+		if err != nil {
+			fmt.Println("Error fetching filters:", err)
+			return
+		}
+
+		// Print the filters in "id: name" format
+		for _, filter := range filters.Values {
+			fmt.Printf("\033[1;34m%ss\033[0m: \033[33m%s\033[0m\n", filter.ID, filter.Name)
+		}
+		return
+	}
+
 	// Build JQL query from flags
 	builder := jira.NewQueryBuilder()
 	jqlQuery := builder.BuildJQLQuery(flags, searchTerms)
