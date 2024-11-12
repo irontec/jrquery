@@ -2,7 +2,7 @@ jquery is simple CLI tool to display Jira tickets on terminal
 
 ## Contributing
 
-All lines of code of this tool has been created by ChatGPT, so most probably there will be lots on possible enhancements.
+All lines of code for this tool have been created by ChatGPT, so most probably there will be lots of possible enhancements.
 Don't hesitate to open a pull request with any suggestion.
 
 ## Configuration
@@ -18,7 +18,7 @@ During the first run, jquery will request some configuration data:
 
 When run without parameters, jquery displays current user unresolved issues.
 
-Please refer to help for additional query parameters
+Please refer to the help section for additional query parameters.
 
 ```
 Usage:
