@@ -99,11 +99,7 @@ func main() {
 			fmt.Println("Error fetching filters:", err)
 			return
 		}
-
-		// Print the filters in "id: name" format
-		for _, filter := range filters.Values {
-			fmt.Printf("\033[1;34m%ss\033[0m: \033[33m%s\033[0m\n", filter.ID, filter.Name)
-		}
+		filters.Print()
 		return
 	}
 
