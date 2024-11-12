@@ -60,7 +60,7 @@ func main() {
 
 		// Display sorted projects with their key and name
 		for _, project := range projects {
-			fmt.Printf("\033[34m%-10s\033[0m: \033[33m%s\033[0m\n", project.Key, project.Name)
+			fmt.Printf("\033[1;34m%ss\033[0m: \033[33m%s\033[0m\n", project.Key, project.Name)
 		}
 		return
 	}
@@ -76,7 +76,7 @@ func main() {
 		// Print users with their username and name
 		for _, user := range users {
 			if user.AccountType == "atlassian" && user.Active {
-				fmt.Printf("\033[1;32m * \033[34m%s\033[0m (\033[33m%s\033[0m)\n", user.EmailAddress, user.DisplayName)
+				fmt.Printf("\033[1;34m%s\033[0m: \033[33m%s\033[0m\n", user.EmailAddress, user.DisplayName)
 			}
 		}
 
