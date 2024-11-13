@@ -26,6 +26,7 @@ type Flags struct {
 	ListProjects bool   `long:"list-projects" description:"List all visible projects for current user"`
 	ListUsers    bool   `long:"list-users" description:"List all users in Jira"`
 	ListFilters  bool   `long:"list-filters" description:"List all saved filters in Jira"`
+	PrintFilter  int    `long:"print-filter" description:"Print the JQL query of a Jira filter by ID"`
 	Version      bool   `short:"v" long:"version" description:"Show the version"`
 }
 

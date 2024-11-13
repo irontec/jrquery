@@ -206,3 +206,12 @@ func (c *Client) GetAllFilters() (*FilterList, error) {
 
 	return NewFilterList(filters.Values, response.MaxResults, response.Total), nil
 }
+
+// GetFilter retrieves an existing Filter from Jira using the apiClient.
+func (c *Client) GetFilter(id int) (*cloud.Filter, error) {
+	filter, _, err := c.apiClient.Filter.Get(context.Background(), id)
+	if err != nil {
+		return nil, err
+	}
+	return filter, nil
+}

@@ -92,6 +92,16 @@ func main() {
 		return
 	}
 
+	// Handle the --print-filter flag
+	if flags.PrintFilter != 0 {
+		filter, err := client.GetFilter(flags.PrintFilter)
+		if err != nil {
+			log.Fatalf("Error retrieving filter: %v", err)
+		}
+		fmt.Printf("%s\n", filter.Jql)
+		return
+	}
+
 	// Build JQL query from flags
 	builder := jira.NewQueryBuilder()
 	jqlQuery := builder.BuildJQLQuery(flags, searchTerms)
