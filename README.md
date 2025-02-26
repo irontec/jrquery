@@ -1,4 +1,4 @@
-jquery is simple CLI tool to display Jira tickets on terminal
+jrquery is simple CLI tool to display Jira tickets on terminal
 
 ## Contributing
 
@@ -7,7 +7,7 @@ Don't hesitate to open a pull request with any suggestion.
 
 ## Configuration
 
-During the first run, jquery will request some configuration data:
+During the first run, jrquery will request some configuration data:
 
  - Jira BaseURL (p.e. https://irontec.atlassian.net)
  - Jira Login Email (p.e. kaian@irontec.com)
@@ -16,13 +16,13 @@ During the first run, jquery will request some configuration data:
 
 ## Usage
 
-When run without parameters, jquery displays current user unresolved issues.
+When run without parameters, jrquery displays current user unresolved issues.
 
 Please refer to the help section for additional query parameters.
 
 ```
 Usage:
-  jquery [OPTIONS]
+  jrquery [OPTIONS]
 
 Application Options:
   -d, --debug          Print debugging information
@@ -49,7 +49,7 @@ Help Options:
 ```
 
 ## License
-    jquery - Jira Issues query tool
+    jrquery - Jira Issues query tool
     Copyright (C) 2024 Irontec S.L.
 
     This program is free software: you can redistribute it and/or modify

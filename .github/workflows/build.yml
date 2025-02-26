@@ -1,4 +1,4 @@
-name: Build jquery binary
+name: Build jrquery binary
 
 on:
   push:
@@ -33,10 +33,10 @@ jobs:
         run: go mod download
 
       - name: Build
-        run: go build -o jquery ./cmd/jquery/main.go
+        run: go build -o jrquery ./cmd/jrquery/main.go
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: jquery
-          path: ./jquery
+          name: jrquery
+          path: ./jrquery

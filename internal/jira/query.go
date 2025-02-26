@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"irontec.com/jquery/config"
+	"irontec.com/jrquery/config"
 )
 
 // QueryBuilder is a helper struct to build flexible JQL queries.

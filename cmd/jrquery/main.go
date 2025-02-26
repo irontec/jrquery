@@ -5,8 +5,8 @@ import (
 	"log"
 	"os/exec"
 
-	"irontec.com/jquery/config"
-	"irontec.com/jquery/internal/jira"
+	"irontec.com/jrquery/config"
+	"irontec.com/jrquery/internal/jira"
 )
 
 var Version = "development"
@@ -21,7 +21,7 @@ func main() {
 
 	// If the --version flag is set, print the version and exit
 	if flags.Version {
-		fmt.Printf("\033[1;36mjquery\033[0m (%s) - Jira Issues query tool [%s]\n\n", Version, Commit)
+		fmt.Printf("\033[1;36mjrquery\033[0m (%s) - Jira Issues query tool [%s]\n\n", Version, Commit)
 
 		fmt.Println("Copyright (C) 2024 Irontec S.L.")
 		fmt.Println("Licenced under GPLv3+: GNU GPL version 3 or greater.")

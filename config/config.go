@@ -22,7 +22,7 @@ func getUserConfigPath() (string, error) {
 	if err != nil {
 		return "", fmt.Errorf("could not get the user's home directory: %v", err)
 	}
-	return filepath.Join(homeDir, ".config", "jquery.json"), nil
+	return filepath.Join(homeDir, ".config", "jrquery.json"), nil
 }
 
 // LoadConfig loads configuration from environment variables or a config file.
@@ -96,7 +96,7 @@ func PromptConfig() error {
 	config := &Config{}
 	reader := bufio.NewReader(os.Stdin)
 
-	fmt.Println("You need a Jira API token to use jquery.")
+	fmt.Println("You need a Jira API token to use jrquery.")
 	fmt.Println()
 	fmt.Println("\033[1;37mhttps://id.atlassian.com/manage-profile/security/api-tokens\033[0m")
 	fmt.Println()

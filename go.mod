@@ -1,4 +1,4 @@
-module irontec.com/jquery
+module irontec.com/jrquery
 
 go 1.22.5
 
