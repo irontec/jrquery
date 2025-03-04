@@ -1,16 +1,28 @@
-jrquery is simple CLI tool to display Jira tickets on terminal
+jrquery is a simple CLI tool to display Jira tickets on the terminal
 
 ## Contributing
 
 All lines of code for this tool have been created by ChatGPT, so most probably there will be lots of possible enhancements.
 Don't hesitate to open a pull request with any suggestion.
 
+## Installation
+Go to [Releases page](https://github.com/irontec/jrquery/releases) and download the latest version of jrquery, give it execution permissions:
+
+```
+chmod +x jrquery
+```
+
+And move it to your preferred binary location:
+```
+sudo mv jrquery /usr/local/bin/
+```
+
 ## Configuration
 
 During the first run, jrquery will request some configuration data:
 
- - Jira BaseURL (p.e. https://irontec.atlassian.net)
- - Jira Login Email (p.e. kaian@irontec.com)
+ - Jira BaseURL (e.g., https://irontec.atlassian.net)
+ - Jira Login Email (e.g., kaian@irontec.com)
  - Jira API Token (you can generate a token at https://id.atlassian.com/manage-profile/security/api-tokens)
 
 
