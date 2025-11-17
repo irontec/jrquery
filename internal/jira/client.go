@@ -46,14 +46,14 @@ func (c *Client) GetIssue(ctx context.Context, issueKey string) (*cloud.Issue, e
 // SearchIssuesWithPagination fetches issues based on a JQL query with pagination and applies a result limit.
 func (c *Client) SearchIssuesWithPagination(jql string, maxResults int) (*IssueList, error) {
 	var allIssues []cloud.Issue
-	startAt := 0
 	totalFetched := 0
 	pageSize := 50
 	total := 0
+	nextPageToken := ""
 
 	for {
 		// Fetch issues in pages of size pageSize
-		issueList, err := c.SearchIssues(jql, startAt, pageSize)
+		issueList, response, err := c.SearchIssues(jql, nextPageToken, pageSize)
 		if err != nil {
 			return nil, fmt.Errorf("error fetching issues with pagination: %w", err)
 		}
@@ -82,7 +82,7 @@ func (c *Client) SearchIssuesWithPagination(jql string, maxResults int) (*IssueL
 		}
 
 		// Move to the next page
-		startAt += pageSize
+		nextPageToken = response.NextPageToken
 	}
 
 	// Return the combined issue list with the total count and max results
@@ -90,19 +90,20 @@ func (c *Client) SearchIssuesWithPagination(jql string, maxResults int) (*IssueL
 }
 
 // SearchIssues executes a JQL query to find issues in Jira.
-func (c *Client) SearchIssues(jql string, start, limit int) (*IssueList, error) {
-	searchOptions := &cloud.SearchOptions{
-		StartAt:    start,
-		MaxResults: limit,
+func (c *Client) SearchIssues(jql string, nextPageToken string, limit int) (*IssueList, *cloud.Response, error) {
+	searchOptions := &cloud.SearchOptionsV2{
+		NextPageToken: nextPageToken,
+		MaxResults:    limit,
+		Fields:        []string{"*all"},
 	}
 
-	issues, response, err := c.apiClient.Issue.Search(context.Background(), jql, searchOptions)
+	issues, response, err := c.apiClient.Issue.SearchV2JQL(context.Background(), jql, searchOptions)
 	if err != nil {
-		return nil, fmt.Errorf("error executing JQL query: %w", err)
+		return nil, nil, fmt.Errorf("error executing JQL query: %w", err)
 	}
 
 	// Create an IssueList
-	return NewIssueList(issues, response.MaxResults, response.Total), nil
+	return NewIssueList(issues, response.MaxResults, response.Total), response, nil
 }
 
 // SearchIssuesByFilter retrieves issues using a pre-existing saved filter by its ID and returns an IssueList with pagination.
@@ -112,19 +113,20 @@ func (c *Client) SearchIssuesByFilter(filterID string, limit int) (*IssueList, e
 
 	// Initialize pagination variables
 	var allIssues []cloud.Issue
-	startAt := 0
 	fetchLimit := 100 // Set a limit for each page of results (maximum Jira allows is 1000)
 
 	// Iterate over pages of issues
+	nextPageToken := ""
 	for {
 		// Create the search options with pagination
-		searchOptions := &cloud.SearchOptions{
-			StartAt:    startAt,
-			MaxResults: fetchLimit,
+		searchOptions := &cloud.SearchOptionsV2{
+			NextPageToken: nextPageToken,
+			MaxResults:    fetchLimit,
+			Fields:        []string{"*all"},
 		}
 
 		// Execute the search with the saved filter
-		issues, response, err := c.apiClient.Issue.Search(context.Background(), jql, searchOptions)
+		issues, response, err := c.apiClient.Issue.SearchV2JQL(context.Background(), jql, searchOptions)
 		if err != nil {
 			return nil, fmt.Errorf("error executing JQL query with filter %s: %w", filterID, err)
 		}
@@ -133,12 +135,11 @@ func (c *Client) SearchIssuesByFilter(filterID string, limit int) (*IssueList, e
 		allIssues = append(allIssues, issues...)
 
 		// Check if there are more pages to fetch
-		if len(allIssues) >= limit || len(allIssues) >= response.Total {
+		if len(allIssues) >= limit || response.IsLast {
 			break
 		}
 
-		// Update the starting point for the next page
-		startAt += fetchLimit
+		nextPageToken = response.NextPageToken
 	}
 
 	// Return the IssueList with the fetched issues and pagination details

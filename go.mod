@@ -3,15 +3,17 @@ module irontec.com/jrquery
 go 1.22.5
 
 require (
-	github.com/andygrunwald/go-jira/v2 v2.0.0-20241105083653-2bb8c510ed50
+	github.com/andygrunwald/go-jira/v2 v2.0.0-20250914065312-05fb5bc92aec
 	github.com/jessevdk/go-flags v1.6.1
 	github.com/spf13/viper v1.19.0
 )
 
+//replace github.com/andygrunwald/go-jira/v2 => github.com/space307/go-jira/v2 v2.0.0-20250903122123-5a66328fccfb
+
 require (
 	github.com/fatih/structs v1.1.0 // indirect
 	github.com/fsnotify/fsnotify v1.7.0 // indirect
-	github.com/golang-jwt/jwt/v4 v4.5.1 // indirect
+	github.com/golang-jwt/jwt/v4 v4.5.2 // indirect
 	github.com/google/go-querystring v1.1.0 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/magiconair/properties v1.8.7 // indirect
