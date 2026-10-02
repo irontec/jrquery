@@ -148,7 +148,8 @@ def setup_config() -> dict:
     email    = Prompt.ask("[bold]Jira Login Email[/bold]")
     token    = Prompt.ask("[bold]Jira API Token[/bold]", password=True)
 
-    config = {"base_url": base_url, "email": email, "token": token}
+    # Conserva el resto de claves (preset activo, comentarios...)
+    config = {**load_config(), "base_url": base_url, "email": email, "token": token}
     save_config(config)
     console.print("\n[green]✔ Config saved![/green]\n")
     return config

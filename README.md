@@ -124,6 +124,8 @@ categoría *Done* (`statusCategory != Done`). Un ejemplo:
 }
 ```
 
+`j --reconfigure` solo cambia las credenciales: el resto de claves se conserva.
+
 ## Uso rápido
 
 ```bash
