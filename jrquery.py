@@ -47,6 +47,11 @@ ME_ALIASES   = {"@me", "me", "mi", "yo", "self", "."}
 # (sustituyen a ese filtro) y "extra_inactive_statuses" (estados que se excluyen además).
 ACTIVE_FALLBACK_JQL = "statusCategory != Done"
 
+# -O filtra por "resolution = Unresolved". Con "unresolved_by_category" activo en
+# ~/.jrquery.json usa la categoría de estado, para workflows que no rellenan la resolución.
+UNRESOLVED_JQL          = "resolution = Unresolved"
+UNRESOLVED_CATEGORY_JQL = "statusCategory != Done"
+
 # Categorías de estado de Jira, independientes del idioma del workflow
 CATEGORY_KEYS = {
     "todo": "new", "new": "new", "nuevo": "new", "nueva": "new",
@@ -195,6 +200,13 @@ def jql_in(field: str, values: list) -> str:
     return f"{field} in ({', '.join(jql_str(v) for v in values)})"
 
 
+def config_flag(value) -> bool:
+    """Interpreta un toggle de la config: true/false, 1/0, enable/disable, on/off, yes/no."""
+    if isinstance(value, str):
+        return value.strip().lower() in {"true", "1", "enable", "enabled", "on", "yes", "si", "sí"}
+    return bool(value)
+
+
 def split_csv(values) -> list:
     """['a,b', 'c'] → ['a', 'b', 'c']"""
     out = []
@@ -262,6 +274,7 @@ class JiraClient:
         self.active_types    = config.get("active_types")    or []
         self.active_statuses = config.get("active_statuses") or []
         self.extra_inactive_statuses = config.get("extra_inactive_statuses") or []
+        self.unresolved_by_category  = config_flag(config.get("unresolved_by_category", False))
         self._statuses = None
         self._types    = None
 
@@ -713,7 +726,11 @@ def build_jql(args, client=None) -> str:
             conditions.append(f"status not in ({', '.join(jql_str(v) for v in excluded)})")
 
         if args.unresolved:
-            conditions.append("resolution = Unresolved")
+            by_category = client.unresolved_by_category if client else False
+            unresolved  = UNRESOLVED_CATEGORY_JQL if by_category else UNRESOLVED_JQL
+            # El preset sin configurar ya puede haber puesto la misma condición
+            if unresolved not in conditions:
+                conditions.append(unresolved)
 
     if not conditions:
         conditions.append("assignee in (currentUser())")

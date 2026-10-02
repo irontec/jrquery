@@ -138,6 +138,20 @@ O, sin cerrar la lista, excluyendo solo algunos estados:
 }
 ```
 
+### Qué entiende `-O` por «sin resolver»
+
+Por defecto `-O` filtra por `resolution = Unresolved`. Con este toggle filtra por categoría
+de estado (`statusCategory != Done`), útil cuando el workflow cierra incidencias sin
+rellenar la resolución:
+
+```json
+{
+  "unresolved_by_category": true
+}
+```
+
+Admite `true`/`false`, `1`/`0`, `"enable"`/`"disable"` y `"on"`/`"off"`.
+
 `j --reconfigure` solo cambia las credenciales: el resto de claves se conserva.
 
 ## Uso rápido
@@ -269,7 +283,9 @@ Si lo que escribes no casa con nada, jrquery te lista los estados disponibles en
 devolver cero resultados en silencio. Para consultarlos a mano: `j --list-statuses`.
 
 Relacionado: `-O/--unresolved` añade `resolution = Unresolved`, que es cosa distinta del
-estado (una incidencia puede estar «Cerrada» y sin resolución).
+estado (una incidencia puede estar «Cerrada» y sin resolución). Si tu workflow no rellena
+la resolución, pon `"unresolved_by_category": true` en `~/.jrquery.json` y `-O` pasará a
+filtrar por `statusCategory != Done`.
 
 ## Filtrar por tipo de incidencia
 
@@ -525,7 +541,7 @@ j -e @todo -u ana -c                      # cuánto tiene sin empezar
 | `-e, --status STATUS` | Estado, por trozo de nombre o `@todo`/`@prog`/`@done`. Repetible o con comas |
 | `-L, --label LABEL` | Etiqueta. Repetible o con comas |
 | `-S, --sprint` | Solo el sprint activo |
-| `-O, --unresolved` | Solo sin resolver (`resolution = Unresolved`) |
+| `-O, --unresolved` | Solo sin resolver (`resolution = Unresolved`, o `statusCategory != Done` con `unresolved_by_category`) |
 | `-a, --active` | Aplica el preset de tipos y estados activos |
 | `-A, --all` | Sin filtros de tipo ni estado. Anula `-a`, `-e` y `-O` |
 
