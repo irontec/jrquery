@@ -43,7 +43,8 @@ ME_ALIASES   = {"@me", "me", "mi", "yo", "self", "."}
 
 # Preset "activo" (-a, y por defecto con -u). Sin configurar: cualquier tipo en un
 # estado que no sea de categoría Done, sea cual sea el idioma del workflow.
-# Se afina desde ~/.jrquery.json con las claves "active_types" y "active_statuses".
+# Se afina desde ~/.jrquery.json con las claves "active_types" y "active_statuses"
+# (sustituyen a ese filtro) y "extra_inactive_statuses" (estados que se excluyen además).
 ACTIVE_FALLBACK_JQL = "statusCategory != Done"
 
 # Categorías de estado de Jira, independientes del idioma del workflow
@@ -260,6 +261,7 @@ class JiraClient:
         self.debug    = debug
         self.active_types    = config.get("active_types")    or []
         self.active_statuses = config.get("active_statuses") or []
+        self.extra_inactive_statuses = config.get("extra_inactive_statuses") or []
         self._statuses = None
         self._types    = None
 
@@ -703,6 +705,10 @@ def build_jql(args, client=None) -> str:
             conditions.append(jql_in("status", statuses))
         elif want_active:
             conditions.append(ACTIVE_FALLBACK_JQL)
+        # Solo cuando los estados salen del preset: un -e explícito manda
+        if want_active and not args.status and client and client.extra_inactive_statuses:
+            excluded = client.extra_inactive_statuses
+            conditions.append(f"status not in ({', '.join(jql_str(v) for v in excluded)})")
 
         if args.unresolved:
             conditions.append("resolution = Unresolved")

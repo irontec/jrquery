@@ -105,9 +105,15 @@ Para cambiar credenciales: `j --reconfigure`.
 
 ### Personalizar el preset «activo»
 
-`~/.jrquery.json` admite dos claves opcionales que definen qué considera «activo» tu
+`~/.jrquery.json` admite claves opcionales que definen qué considera «activo» tu
 equipo. Si no están, el preset deja pasar cualquier tipo en un estado que no sea de
-categoría *Done* (`statusCategory != Done`). Un ejemplo:
+categoría *Done* (`statusCategory != Done`).
+
+- `active_types` y `active_statuses` **sustituyen** a ese filtro por una lista cerrada.
+- `extra_inactive_statuses` **resta** estados además: útil para estados como «Blocked»,
+  que Jira no considera *Done* pero tú no quieres ver como activos.
+
+Un ejemplo con lista cerrada:
 
 ```json
 {
@@ -121,6 +127,14 @@ categoría *Done* (`statusCategory != Done`). Un ejemplo:
   "active_statuses": [
     "Nueva", "En curso", "Reabierta"
   ]
+}
+```
+
+O, sin cerrar la lista, excluyendo solo algunos estados:
+
+```json
+{
+  "extra_inactive_statuses": ["Blocked"]
 }
 ```
 
@@ -320,6 +334,12 @@ Con `active_types` y `active_statuses` en `~/.jrquery.json` (ver
 issuetype in ("Tarea", "Incidencia", "Error") AND status in ("Nueva", "En curso", "Reabierta")
 ```
 
+Con `extra_inactive_statuses` (y sin las otras dos claves) queda:
+
+```sql
+statusCategory != Done AND status not in ("Blocked")
+```
+
 **Cuándo se aplica:**
 
 | Situación | ¿Preset? |
@@ -328,7 +348,7 @@ issuetype in ("Tarea", "Incidencia", "Error") AND status in ("Nueva", "En curso"
 | `j -u`, `j -u ana` | Sí |
 | `-a` / `--active` | Sí, explícito — combinable con cualquier otro filtro |
 | `-A` / `--all` | **No**, lo desactiva por completo |
-| Pasas tu propio `-e` | Sustituye la parte de estados |
+| Pasas tu propio `-e` | Sustituye la parte de estados (`extra_inactive_statuses` incluido) |
 | Pasas tu propio `-t` | Sustituye la parte de tipos |
 | `--from` / `--to` / `-r` | **No** se aplica implícitamente: una consulta por fechas es histórica. Usa `-a` si lo quieres |
 
