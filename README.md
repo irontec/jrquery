@@ -350,6 +350,7 @@ statusCategory != Done AND status not in ("Blocked")
 | `-A` / `--all` | **No**, lo desactiva por completo |
 | Pasas tu propio `-e` | Sustituye la parte de estados (`extra_inactive_statuses` incluido) |
 | Pasas tu propio `-t` | Sustituye la parte de tipos |
+| `-O` / `--unresolved` | **No** se aplica implícitamente: «sin resolver» no es «activo». Usa `-a -O` si quieres los dos |
 | `--from` / `--to` / `-r` | **No** se aplica implícitamente: una consulta por fechas es histórica. Usa `-a` si lo quieres |
 
 ```bash

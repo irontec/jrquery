@@ -679,9 +679,11 @@ def build_jql(args, client=None) -> str:
     # Preset "activo": explícito con -a, implícito con -u o sin argumentos.
     # -A lo desactiva; -t y -e sustituyen la mitad que toquen.
     # Una consulta con rango de fechas es histórica: ahí solo cuenta el -a explícito.
+    # -O ya pide "sin resolver", que no es lo mismo que "activo": tampoco lo activa solo.
     historic   = bool(args.date_from or args.date_to or args.recent)
     want_active = args.active or (
-        not args.all and not historic and (args.user is not None or mine_by_default)
+        not args.all and not historic and not args.unresolved
+        and (args.user is not None or mine_by_default)
     )
     if args.all:
         want_active = False
